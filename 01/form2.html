@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+  <head>
+    <!-- this contains meta-information -->
+    <title>This is the page title</title>
+  </head>
+  <body>
+    <form method="POST" action="process_data2.php">
+      <input type="hidden" name="id" value="this is a hidden ID" />
+      <table border="1">
+        <tr>
+          <th>Naam:</th>
+          <td><input type="text" name="naam" /></td>
+        </tr>
+        <tr>
+          <th>Leeftijd:</th>
+          <td><input type="number" name="leeftijd" /></td>
+        </tr>
+      </table>
+      <br />
+      <input type="submit" name="thebutton" value="Save!" />
+    </form>
+  </body>
+</html>
