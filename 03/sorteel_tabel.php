@@ -1,0 +1,106 @@
+<?php
+
+// Data: elke persoon heeft een naam en een adres
+$personenTabel = [
+    ["naam" => "Ben", "adres" => "Breda"],
+    ["naam" => "Tom", "adres" => "Eindhoven"],
+    ["naam" => "Daan", "adres" => "Tilburg"],
+    ["naam" => "Jodry", "adres" => "Den Bosch"]
+];
+
+// Standaard wordt op naam gesorteerd
+$gedrukteKolom = "naam"; //lege str geeft error
+
+// Standaard sorteerrichting
+$huidigeOrding = "ASC"; // "ASC is ascending, "DESC" is voor descending
+
+// Richting die bij de volgende klik wordt meegestuurd
+$volgendeOrding = "ASC";
+
+
+//word gecheckt of formulier is verstuurd via POST
+//dus alleen na indrukken op een knop
+if ($_POST) {
+    //welke knop is aangeklikt: naam of adres
+    $gedrukteKolom = $_POST["kolomKnop"];
+
+    //welke sorteerrichting is meegestuurd
+    $huidigeOrding = $_POST["richting"];
+
+    //bereken alvast de richting voor de volgende klik, wissel ASC en DESC om
+    if ($huidigeOrding == "ASC") {
+        $volgendeOrding = "DESC";
+    } else {
+        $volgendeOrding = "ASC";
+    }
+}
+
+
+//sorteer op gekozen kolom
+/*chatgpt en het antwoord gebruikt om deze sortering netter en werkend te krijgen
+was zelf aan het klungelen met dubbele for-loops
+en kreeg hem niet werkend
+*/
+usort($personenTabel, function ($a, $b) use ($gedrukteKolom, $huidigeOrding) {
+    //usort vergelijkt steeds twee personen uit de array: $a en $b
+
+    //use zorgt dat deze functie ook de variabelen kent
+    //hier: de aangeklikte kolom en de sorteerrichting
+
+    if ($huidigeOrding == "ASC") {
+        //strcmp vergelijkt twee strings alfabetisch
+        return strcmp($a[$gedrukteKolom], $b[$gedrukteKolom]);
+    } else {
+        //bij DESC draaien we a en b om
+        return strcmp($b[$gedrukteKolom], $a[$gedrukteKolom]);
+    }
+});
+
+?>
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Sorteer tabel</title>
+</head>
+
+<body>
+
+    <form method="post">
+
+        <!-- hidden veld om richting te onthouden -->
+        <input
+            type="hidden"
+            name="richting"
+            value="<?php echo $volgendeOrding; ?>">
+
+        <table border="1">
+
+            <tr>
+                <th>
+                    <!-- bij press wordt kolomKnop = naam verstuurd -->
+                    <button type="submit" name="kolomKnop" value="naam">
+                        Naam
+                    </button>
+                </th>
+
+                <th>
+                    <!-- bij een press wordt kolomKnop = adres verstuurd -->
+                    <button type="submit" name="kolomKnop" value="adres">
+                        Adres
+                    </button>
+                </th>
+            </tr>
+
+            <!-- elke persoon wordt als één rij in de tabel gezet -->
+            <?php foreach ($personenTabel as $persoon) { ?>
+                <tr>
+                    <td><?php echo $persoon["naam"]; ?></td>
+                    <td><?php echo $persoon["adres"]; ?></td>
+                </tr>
+            <?php } ?>
+        </table>
+    </form>
+</body>
+</html>
