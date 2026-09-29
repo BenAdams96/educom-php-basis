@@ -1,19 +1,25 @@
 <?php
-//NOTE TO SELF/BUGFIX: pagina refreshen zorgt nog voor dat Appel met 1 omhoog gaat
-//NOTE TO SELF: also fix prettier extension + download better comments
 
 session_start();
 
 $items = [
-    ["naam" => "Appel", "prijs" => 1.25],
-    ["naam" => "Banaan", "prijs" => 0.95]
+    "Appel" => 1.25,
+    "Banaan" => 0.95,
+    "Kiwi" => 1.10,
+    "Meloen" => 2.99
 ];
 
+//winkelwagen leegmaken
+if (isset($_POST["reset"])) {
+    session_unset();
+
+    header("Location: " . $_SERVER["PHP_SELF"]);
+    exit;
+}
+
 //check of er een item is toegevoegd
-if (isset($_POST["item"])) {
-
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $item = $_POST["item"];
-
     //als item nog niet in winkelwagen zit, begin bij 1
     if (!isset($_SESSION[$item])) {
         $_SESSION[$item] = 1;
@@ -21,59 +27,74 @@ if (isset($_POST["item"])) {
         //anders aantal met 1 verhogen
         $_SESSION[$item]++;
     }
+    //na POST opnieuw laden als gewone GET
+    header("Location: " . $_SERVER["PHP_SELF"]);
+    exit;
 }
 
 ?>
 
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Winkelwagen</title>
 </head>
 
 <body>
 
-<h2>Producten</h2>
+    <h2>Producten</h2>
 
-<?php foreach ($items as $item) { ?>
-
-    <p>
-        <?php echo $item["naam"]; ?>
-        - €<?php echo $item["prijs"]; ?>
+    <?php foreach ($items as $itemNaam => $price) { ?>
 
         <form method="POST">
-            <input
-                type="hidden"
-                name="item"
-                value="<?php echo $item["naam"]; ?>"
-            >
+            <?php echo $itemNaam; ?>
+            - €<?php echo $price; ?>
 
-            <button type="submit">
+            <button type="submit" name="item" value="<?php echo $itemNaam; ?>">
                 Voeg toe
             </button>
         </form>
-    </p>
-
-<?php } ?>
+    <?php } ?>
 
 
-<h2>Winkelwagen</h2>
+    <h2>Winkelwagen</h2>
 
-<?php
+    <?php
 
-//toon de huidige inhoud van de session
-if (empty($_SESSION)) {
+    $totaalPrijs = 0;
 
-    echo "Winkelwagen is leeg.";
+    foreach ($_SESSION as $itemNaam => $aantal) {
 
-} else {
+        $prijs = $items[$itemNaam];
+        $itemTotaal = $prijs * $aantal;
 
-    foreach ($_SESSION as $item => $aantal) {
-        echo $item . ": " . $aantal . "<br>";
+        $totaalPrijs += $itemTotaal;
+
+        echo $itemNaam . ": " . $aantal .
+            " x €" . number_format($prijs, 2) .
+            " = €" . number_format($itemTotaal, 2) . "<br>";
     }
-}
 
-?>
+    if (!empty($_SESSION)) {
+
+        echo "<br>Totaal: €" . number_format($totaalPrijs, 2);
+    ?>
+
+        <form method="POST">
+            <button type="submit" name="reset">
+                Winkelwagen leegmaken
+            </button>
+        </form>
+
+    <?php
+    } else {
+        echo "Winkelwagen is leeg.";
+    }
+
+    ?>
+
 
 </body>
+
 </html>
