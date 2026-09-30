@@ -7,13 +7,12 @@ require "db.php";
 //uitloggen
 if (isset($_POST["logout"])) {
     session_unset();
-    session_destroy();
 
     header("Location: webshop_login.php");
     exit;
 }
 
-//als al ingelogd, naar webshop
+//als user al ingelogd is, naar webshop
 if (isset($_SESSION["user"])) {
     header("Location: webshop.php");
     exit;
@@ -22,17 +21,17 @@ if (isset($_SESSION["user"])) {
 $melding = "";
 
 //inloggen
-if (isset($_POST["naam"])) {
+if (isset($_POST["login"])) {
 
     $naam = $_POST["naam"];
 
-    $naam = mysqli_real_escape_string($connection, $naam);
-
+    //zoek gebruiker in database
     $query = "SELECT id, naam FROM user WHERE naam = '$naam'";
     $result = mysqli_query($connection, $query);
 
     $userData = mysqli_fetch_assoc($result);
 
+    //als gebruiker bestaat
     if ($userData) {
 
         //user data opslaan in session
@@ -55,7 +54,7 @@ if (isset($_POST["naam"])) {
 <html>
 
 <head>
-    <title>Login</title>
+    <title>Webshop login</title>
 </head>
 
 <body>
@@ -63,12 +62,14 @@ if (isset($_POST["naam"])) {
     <h2>Login</h2>
 
     <form method="POST">
+
         Naam:
         <input type="text" name="naam">
 
-        <button type="submit">
+        <button type="submit" name="login">
             Login
         </button>
+
     </form>
 
     <?php echo $melding; ?>

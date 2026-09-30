@@ -11,22 +11,29 @@ $items = [
 
 //winkelwagen leegmaken
 if (isset($_POST["reset"])) {
-    session_unset();
+    $_SESSION["cart"] = [];
 
     header("Location: " . $_SERVER["PHP_SELF"]);
     exit;
 }
 
 //check of er een item is toegevoegd
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if (isset($_POST["item"])) {
     $item = $_POST["item"];
+
+    //als cart nog niet bestaat, maak hem aan
+    if (!isset($_SESSION["cart"])) {
+        $_SESSION["cart"] = [];
+    }
+
     //als item nog niet in winkelwagen zit, begin bij 1
-    if (!isset($_SESSION[$item])) {
-        $_SESSION[$item] = 1;
+    if (!isset($_SESSION["cart"][$item])) {
+        $_SESSION["cart"][$item] = 1;
     } else {
         //anders aantal met 1 verhogen
-        $_SESSION[$item]++;
+        $_SESSION["cart"][$item]++;
     }
+
     //na POST opnieuw laden als gewone GET
     header("Location: " . $_SERVER["PHP_SELF"]);
     exit;
@@ -55,6 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 Voeg toe
             </button>
         </form>
+
     <?php } ?>
 
 
@@ -64,21 +72,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $totaalPrijs = 0;
 
-    foreach ($_SESSION as $itemNaam => $aantal) {
+    if (isset($_SESSION["cart"])) {
 
-        $prijs = $items[$itemNaam];
-        $itemTotaal = $prijs * $aantal;
+        foreach ($_SESSION["cart"] as $itemNaam => $aantal) {
 
-        $totaalPrijs += $itemTotaal;
+            $prijs = $items[$itemNaam];
+            $itemTotaal = $prijs * $aantal;
 
-        echo $itemNaam . ": " . $aantal .
-            " x €" . number_format($prijs, 2) .
-            " = €" . number_format($itemTotaal, 2) . "<br>";
+            $totaalPrijs += $itemTotaal;
+
+            echo $itemNaam . ": " . $aantal .
+                " x €" . number_format($prijs, 2) .
+                " = €" . number_format($itemTotaal, 2) . "<br>";
+        }
     }
 
-    if (!empty($_SESSION)) {
+    if (!empty($_SESSION["cart"])) {
 
         echo "<br>Totaal: €" . number_format($totaalPrijs, 2);
+
     ?>
 
         <form method="POST">
@@ -88,12 +100,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </form>
 
     <?php
+
     } else {
         echo "Winkelwagen is leeg.";
     }
 
     ?>
-
 
 </body>
 
