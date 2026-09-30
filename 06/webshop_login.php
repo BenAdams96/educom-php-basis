@@ -44,7 +44,7 @@ if (isset($_POST["login"])) {
         exit;
 
     } else {
-        $melding = "Gebruiker niet gevonden.";
+        $melding = "gebruiker bestaat niet/niet gevonden in de database";
     }
 }
 

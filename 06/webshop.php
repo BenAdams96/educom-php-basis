@@ -39,7 +39,7 @@ if (isset($_POST["item_id"])) {
     exit;
 }
 
-//alle producten ophalen
+//alle producten ophalen (NOTE: EXTRA CHECKEN)
 $query = "SELECT * FROM items";
 $itemsResult = mysqli_query($connection, $query);
 
