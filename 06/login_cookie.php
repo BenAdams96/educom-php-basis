@@ -13,14 +13,14 @@ function show_form() {
 if (isset($_POST["logout"])) {
     setcookie("user", "", time() - 1); //cookie leeg maken en verloopdatum in verleden zetten
     header("Location: login_cookie.php"); //pagina opnieuw laden zodat cookie weg is
-    exit;
+    //exit;
 }
 
 //check of login formulier is verstuurd
 if (isset($_POST["user"])) {
     setcookie("user", $_POST["user"]); //naam opslaan in cookie
     header("Location: login_cookie.php"); //pagina opnieuw laden zodat cookie beschikbaar is
-    exit;
+    //exit;
 }
 
 //check of user cookie bestaat

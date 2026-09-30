@@ -13,40 +13,93 @@ if (!isset($_SESSION["user"])) {
 $userId = $_SESSION["user"]["id"];
 $userNaam = $_SESSION["user"]["naam"];
 
+
 //winkelwagen leegmaken
 if (isset($_POST["reset"])) {
 
-    $query = "DELETE FROM orders WHERE user_id = $userId";
-    mysqli_query($connection, $query);
+    //order van deze gebruiker zoeken
+    $query = "SELECT id FROM orders WHERE user_id = $userId";
+    $result = mysqli_query($connection, $query);
+    $order = mysqli_fetch_assoc($result);
+
+    if ($order) {
+        $orderId = $order["id"];
+
+        //alle items uit de order verwijderen
+        $query = "DELETE FROM order_item WHERE order_id = $orderId";
+        mysqli_query($connection, $query);
+    }
 
     header("Location: webshop.php");
     exit;
 }
+
 
 //check of er een item is toegevoegd
 if (isset($_POST["item_id"])) {
 
     $itemId = $_POST["item_id"];
 
-    //order toevoegen aan database
-    $query = "INSERT INTO orders (user_id, item_id)
-              VALUES ($userId, $itemId)";
+    //kijken of gebruiker al een order heeft
+    $query = "SELECT id FROM orders WHERE user_id = $userId";
+    $result = mysqli_query($connection, $query);
+    $order = mysqli_fetch_assoc($result);
+
+    //als er nog geen order is, maak er een
+    if (!$order) {
+
+        $query = "INSERT INTO orders (user_id)
+                  VALUES ($userId)";
+
+        mysqli_query($connection, $query);
+
+        $orderId = mysqli_insert_id($connection);
+
+    } else {
+        $orderId = $order["id"];
+    }
+
+    //kijken of item al in de order zit
+    $query = "SELECT * FROM order_item
+              WHERE order_id = $orderId
+              AND item_id = $itemId";
+
+    $result = mysqli_query($connection, $query);
+    $orderItem = mysqli_fetch_assoc($result);
+
+    if ($orderItem) {
+
+        //item bestaat al, dus aantal verhogen
+        $query = "UPDATE order_item
+                  SET aantal = aantal + 1
+                  WHERE order_id = $orderId
+                  AND item_id = $itemId";
+
+    } else {
+
+        //item voor het eerst toevoegen
+        $query = "INSERT INTO order_item (order_id, item_id, aantal)
+                  VALUES ($orderId, $itemId, 1)";
+    }
 
     mysqli_query($connection, $query);
 
-    //na POST opnieuw laden als gewone GET
+    //na POST opnieuw laden als GET
     header("Location: webshop.php");
     exit;
 }
 
-//alle producten ophalen (NOTE: EXTRA CHECKEN)
+
+//alle producten ophalen
 $query = "SELECT * FROM items";
 $itemsResult = mysqli_query($connection, $query);
 
-//alle items uit winkelwagen ophalen
-$query = "SELECT items.id, items.naam, items.prijs
+
+//winkelwagen van deze gebruiker ophalen
+$query = "SELECT items.naam, items.prijs, order_item.aantal
           FROM orders
-          JOIN items ON orders.item_id = items.id
+          JOIN order_item ON orders.id = order_item.order_id
+          JOIN items ON order_item.item_id = items.id
           WHERE orders.user_id = $userId";
 
 $cartResult = mysqli_query($connection, $query);
@@ -78,7 +131,9 @@ $cartResult = mysqli_query($connection, $query);
         <form method="POST">
 
             <?php
-            echo $item["naam"] . " - €" . number_format($item["prijs"], 2);
+            echo $item["naam"] .
+                " - €" .
+                number_format($item["prijs"], 2);
             ?>
 
             <button
@@ -98,45 +153,28 @@ $cartResult = mysqli_query($connection, $query);
 
     <?php
 
-    $winkelwagen = [];
     $totaalPrijs = 0;
+    $winkelwagenLeeg = true;
 
-    //producten uit orders verzamelen
     while ($item = mysqli_fetch_assoc($cartResult)) {
 
-        $itemNaam = $item["naam"];
-        $prijs = $item["prijs"];
+        $winkelwagenLeeg = false;
 
-        //als item nog niet in winkelwagen staat, begin bij 1
-        if (!isset($winkelwagen[$itemNaam])) {
-
-            $winkelwagen[$itemNaam] = [
-                "prijs" => $prijs,
-                "aantal" => 1
-            ];
-
-        } else {
-
-            //anders aantal verhogen
-            $winkelwagen[$itemNaam]["aantal"]++;
-        }
-    }
-
-    //winkelwagen tonen
-    foreach ($winkelwagen as $itemNaam => $item) {
-
+        $naam = $item["naam"];
         $prijs = $item["prijs"];
         $aantal = $item["aantal"];
 
         $itemTotaal = $prijs * $aantal;
         $totaalPrijs += $itemTotaal;
 
-        echo $itemNaam . ": " . $aantal .
+        echo $naam . ": " . $aantal .
             " x €" . number_format($prijs, 2) .
-            " = €" . number_format($itemTotaal, 2) . "<br>";
+            " = €" . number_format($itemTotaal, 2) .
+            "<br>";
     }
 
-    if (!empty($winkelwagen)) {
+
+    if (!$winkelwagenLeeg) {
 
         echo "<br>Totaal: €" . number_format($totaalPrijs, 2);
 
