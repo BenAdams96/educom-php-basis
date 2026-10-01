@@ -23,17 +23,14 @@ if (isset($_POST["reset"])) {
     $cart->emptyCart();
 
     header("Location: show_shopping_cart.php");
-    exit;
 }
 
 //item toevoegen
 if (isset($_POST["item"])) {
     $itemId = $_POST["item"];
-
     $cart->addToCart($itemId);
 
     header("Location: show_shopping_cart.php");
-    exit;
 }
 
 ?>

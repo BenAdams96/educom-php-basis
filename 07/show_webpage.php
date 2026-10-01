@@ -1,6 +1,6 @@
 <?php
 
-include("Webpage.php");
+include("classes_webpage.php");
 
 //nieuwe pagina maken
 $page = new WebPage("Eerste website");
