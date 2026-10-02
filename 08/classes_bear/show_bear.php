@@ -9,7 +9,7 @@ $bear = new Bear("Baloo", 8, 180);
 
 //grizzly maken
 $grizzly = new Grizzly("Bruno", 12, 300, 30);
-$panda = new Panda("Po", 12, 300, True);
+$panda = new Panda("Po", 12, 300, 5);
 
 echo "<h2>Bear</h2>";
 echo $bear->getInfo();
