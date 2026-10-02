@@ -1,9 +1,13 @@
 # Les 08
 
-## abstract variable
+## abstract class
 
-Voornaamste reden waarom abstract variable niet als class gebruikt kan worden is omdat het meer fungeert als initieel blauwprint. je erft de basis code. het is geen object.
+Voornaamste reden waarom abstract class niet als class gebruikt kan worden is omdat het meer fungeert als initieel blauwprint. je erft de basis code. je kunt er niet direct een class van bouwen door 'new' te gebruiken.
 
-het mag al wel variabelen en methodes bevatten zoals Classes ook doen, maar de variabelen en methodes zijn leeg. Dus het werkt echt als blauwprint.
+Een abstracte class mag gewone variabelen en methodes bevatten. Deze methodes mogen ook al volledig uitgewerkt zijn. Daarnaast kan een abstracte class abstracte methodes bevatten. Deze hebben nog geen inhoud en moeten door een child class worden ingevuld.
 
-het is ook daadwerkelijk niet mogelijk om het te proberen, PHP geeft error code als je probeert een instantie te initialiseren. 
+in de code/voorbeeld heeft Vehicle de abstracte methode drive(). Daarom moet Car zelf bepalen wat drive() doet.
+
+dit werkt dus niet: $vehicle = new Vehicle();
+dit werkt dus wel: $car = new Car();
+
