@@ -12,8 +12,10 @@ try {
     );
 
     //formulier is verstuurd
-    if ($_SERVER["REQUEST_METHOD"] === "POST" &&
-        isset($_POST["id"], $_POST["naam"], $_POST["prijs"])) {
+    if (
+        $_SERVER["REQUEST_METHOD"] === "POST" &&
+        isset($_POST["id"], $_POST["naam"], $_POST["prijs"])
+    ) {
 
         $id = $_POST["id"];
         $naam = $_POST["naam"];
@@ -34,7 +36,7 @@ try {
 
         //terug naar overzicht
         header("Location: show.php");
-        exit;
+        exit; //nodig
     }
 
     //id ophalen uit url
@@ -50,7 +52,6 @@ try {
     ]);
 
     $item = $sth->fetch(PDO::FETCH_ASSOC);
-
 } catch (PDOException $error) {
 
     die("Database error: " . $error->getMessage());
@@ -65,28 +66,24 @@ try {
     <input
         type="hidden"
         name="id"
-        value="<?php echo $item["id"]; ?>"
-    >
+        value="<?php echo $item["id"]; ?>">
 
     Naam:
     <input
         type="text"
         name="naam"
-        value="<?php echo $item["naam"]; ?>"
-    >
+        value="<?php echo $item["naam"]; ?>">
     <br>
 
     Prijs:
     <input
         type="text"
         name="prijs"
-        value="<?php echo $item["prijs"]; ?>"
-    >
+        value="<?php echo $item["prijs"]; ?>">
     <br>
 
     <input
         type="submit"
-        value="Update"
-    >
+        value="Update">
 
 </form>

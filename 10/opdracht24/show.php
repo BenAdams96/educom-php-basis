@@ -17,7 +17,6 @@ try {
 
     //alle items ophalen als associatieve array
     $items = $sth->fetchAll(PDO::FETCH_ASSOC);
-
 } catch (PDOException $error) {
 
     die("Database fout: " . $error->getMessage());
@@ -48,8 +47,10 @@ try {
                     Aanpassen
                 </a>
             </td>
+            <br>
         </tr>
-
+        
     <?php } ?>
 
 </table>
+<a href="insert.php">Nieuw item toevoegen</a>
