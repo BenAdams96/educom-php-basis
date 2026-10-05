@@ -1,15 +1,20 @@
 <?php
 
-require "DBConnect.php";
-require "Person.php";
+require("DBConnect.php");
+require("Person.php");
 
 //database connectie ophalen
-$db_handle = DBConnect::getInstance();
+$db_connection = DBConnect::getInstance();
 
-//database connectie meegeven aan Person
-$person = new Person($db_handle);
-
-//personen tonen
+//connectie meegeven aan Person
+$person = new Person($db_connection);
 $person->showPersons();
+
+
+
+
+//user object maken en connectie meegeven
+$user = new User($db_connection);
+$user->showUsers();
 
 ?>

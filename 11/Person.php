@@ -2,21 +2,23 @@
 
 class Person {
 
-    private $db_handle;
+    public $db_connection; //connection
 
-    function __construct($db_handle) {
-        $this->db_handle = $db_handle;
+    public function __construct($db_con) {
+        $this->db_connection = $db_con;
     }
 
-    function showPersons() {
+    public function showPersons() {
+        $sql = "SELECT * FROM user";
+        $result = $this->db_connection->query($sql);
+        // $this->db_connection->query() (voert ook direct uit)
+        // gebruik try {} except {} (voor als connectie niet lukt)
+        // alvast in de DBConnect.php
 
-        $sth = $this->db_handle->prepare("SELECT * FROM user");
-        $sth->execute();
-
-        $persons = $sth->fetchAll(PDO::FETCH_ASSOC);
-
-        foreach ($persons as $person) {
-            echo $person["naam"] . "<br>";
+        foreach ($result as $row) {
+            echo $row["naam"] . "<br>";
         }
     }
 }
+
+?>

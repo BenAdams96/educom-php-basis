@@ -2,18 +2,31 @@
 
 class DBConnect {
 
-    private static $instance;
+    static $db;
+    private $dbh;
 
-    public static function getInstance() {
+    private function __construct() {
 
-        if (!self::$instance) {
-            self::$instance = new PDO(
+        try {
+
+            $this->dbh = new PDO(
                 "mysql:host=localhost;dbname=webshop",
                 "root",
                 ""
             );
+
+        } catch (PDOException $error) {
+            echo $error->getMessage();
+        }
+    }
+
+    public static function getInstance() {
+        if (!isset(DBConnect::$db)) {
+            DBConnect::$db = new DBConnect();
         }
 
-        return self::$instance;
+        return DBConnect::$db->dbh;
     }
 }
+
+?>
