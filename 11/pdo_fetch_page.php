@@ -1,10 +1,18 @@
 <?php
 
+//altijd de links laten zien
+echo "<a href='pdo_fetch_page.php?fetch_method=1'>PDO::FETCH_ASSOC</a><br><br>";
+echo "<a href='pdo_fetch_page.php?fetch_method=2'>PDO::FETCH_BOTH</a><br><br>";
+echo "<a href='pdo_fetch_page.php?fetch_method=3'>PDO::FETCH_LAZY</a><br><br>";
+echo "<a href='pdo_fetch_page.php?fetch_method=4'>PDO::FETCH_OBJ</a><br><br>";
+
+
 //checken of er een fetch methode is via GET
 if (isset($_GET["fetch_method"])) {
-    $fetch_method = $_GET["fetch_method"]; //ophalen fetch methode
 
-    //connectie maken met database via try and catch.
+    $fetch_method = $_GET["fetch_method"];
+
+    //connectie maken met database
     try {
         $dbh = new PDO(
             "mysql:host=localhost;dbname=webshop",
@@ -19,31 +27,28 @@ if (isset($_GET["fetch_method"])) {
     $sth = $dbh->prepare("SELECT * FROM user");
     $sth->execute();
 
-    //afhankelijk van het nummer een andere fetch methode gebruiken
+    //afhankelijk van nummer andere fetch methode gebruiken
     switch ($fetch_method) {
         case 1:
             $result = $sth->fetch(PDO::FETCH_ASSOC); //associatieve array
             break;
         case 2:
-            $result = $sth->fetch(PDO::FETCH_BOTH); //array met kolomnamen als nummers (als keys)
+            $result = $sth->fetch(PDO::FETCH_BOTH); //kolomnamen en nummers als keys
             break;
-
         case 3:
-            $result = $sth->fetch(PDO::FETCH_LAZY); //lazy object, data word opgehaald en uitgebreid
+            $result = $sth->fetch(PDO::FETCH_LAZY); //lazy object
             break;
-
         case 4:
             $result = $sth->fetch(PDO::FETCH_OBJ); //teruggeven als object
             break;
         default:
             $result = "Geen methode gekozen";
     }
+
+    //resultaat onder de links laten zien
     echo "<pre>";
     var_dump($result);
     echo "</pre>";
-} else {
-    echo "<a href='pdo_fetch_page.php?fetch_method=1'>PDO::FETCH_ASSOC</a><br><br>";
-    echo "<a href='pdo_fetch_page.php?fetch_method=2'>PDO::FETCH_BOTH</a><br><br>";
-    echo "<a href='pdo_fetch_page.php?fetch_method=3'>PDO::FETCH_LAZY</a><br><br>";
-    echo "<a href='pdo_fetch_page.php?fetch_method=4'>PDO::FETCH_OBJ</a><br><br>";
 }
+
+?>

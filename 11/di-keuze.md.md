@@ -1,0 +1,1 @@
+Bij DI krijgt een class zijn dependency van buitenaf mee. Hierdoor hoeft Person niet zelf te weten hoe de databaseconnectie wordt gemaakt en is Person minder sterk gekoppeld aan DBConnect. Daardoor is de code duidelijker, makkelijker aan te passen en makkelijker te testen. Kunnen van Person afblijven als we aan de Database connectie script willen werken.
