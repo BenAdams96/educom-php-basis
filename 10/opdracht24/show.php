@@ -12,14 +12,14 @@ try {
     );
 
     //query voorbereiden en uitvoeren
-    $sth = $dbh->prepare("SELECT * FROM items");
-    $sth->execute();
+    $sth = $dbh->prepare("SELECT * FROM items"); //sth becomes an object (PDOstatement)
+    $sth->execute(); //returns True or False. so $dbh->prepare("SELECT * FROM items")->execute(); doesnt work
 
     //alle items ophalen als associatieve array
-    $items = $sth->fetchAll(PDO::FETCH_ASSOC);
+    $items = $sth->fetchAll(PDO::FETCH_ASSOC); //fetchAll() needs to be called on PDOstatement
 } catch (PDOException $error) {
-
-    die("Database fout: " . $error->getMessage());
+    die("Database fout: " . $error->getMessage()); //haalt foutmelding uit object in var $error
+    //die, print de tekst en stopt daarna de PHP.09/login.php
 }
 
 ?>
@@ -49,7 +49,7 @@ try {
             </td>
             <br>
         </tr>
-        
+
     <?php } ?>
 
 </table>

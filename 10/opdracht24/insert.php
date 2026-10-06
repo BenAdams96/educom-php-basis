@@ -3,7 +3,6 @@
 require "db.php";
 
 try {
-
     //connectie maken met database
     $dbh = new PDO( //mischien in db bestandje doen volgende keer.
         "mysql:host=$host;dbname=$dbname",
@@ -20,8 +19,7 @@ try {
 
         //nieuw item toevoegen
         $sth = $dbh->prepare(
-            "INSERT INTO items (naam, prijs)
-             VALUES (:naam, :prijs)"
+            "INSERT INTO items (naam, prijs) VALUES (:naam, :prijs)"
         );
 
         $sth->execute([

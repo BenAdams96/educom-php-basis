@@ -2,8 +2,9 @@
 
 require "db.php";
 
-try {
+//Q: eerst try? of eerst if om te checken voor POST.
 
+try {
     //connectie maken met database
     $dbh = new PDO(
         "mysql:host=$host;dbname=$dbname",
@@ -12,10 +13,8 @@ try {
     );
 
     //formulier is verstuurd
-    if (
-        $_SERVER["REQUEST_METHOD"] === "POST" &&
-        isset($_POST["id"], $_POST["naam"], $_POST["prijs"])
-    ) {
+    if ($_SERVER["REQUEST_METHOD"] === "POST" &&
+        isset($_POST["id"], $_POST["naam"], $_POST["prijs"])) {
 
         $id = $_POST["id"];
         $naam = $_POST["naam"];
