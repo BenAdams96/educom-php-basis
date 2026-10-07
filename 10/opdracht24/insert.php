@@ -2,6 +2,8 @@
 
 require "db.php";
 
+//! kan ook nog string invullen bij int
+
 try {
     //connectie maken met database
     $dbh = new PDO( //mischien in db bestandje doen volgende keer.
