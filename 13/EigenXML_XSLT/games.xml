@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+
+<games collection="Mijn game collectie">
+
+    <game platform="PlayStation 2" completed="yes">
+        <title>Ratchet &amp; Clank</title>
+        <genre>Action</genre>
+        <year>2002</year>
+        <score>9</score>
+        <hours>45</hours>
+    </game>
+
+    <game platform="PlayStation 4" completed="no">
+        <title>Fortnite</title>
+        <genre>Battle Royale</genre>
+        <year>2017</year>
+        <score>8.5</score>
+        <hours>670</hours>
+    </game>
+
+    <game platform="PlayStation 4" completed="yes">
+        <title>God of War</title>
+        <genre>Action</genre>
+        <year>2018</year>
+        <score>9</score>
+        <hours>88</hours>
+    </game>
+
+</games>
