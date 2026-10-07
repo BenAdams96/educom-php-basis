@@ -36,7 +36,8 @@ class User
         $result = $sth->fetch(PDO::FETCH_OBJ);
 
         //checken of user bestaat en wachtwoord klopt
-        if ($result && password_verify($password, $result->wachtwoord)) {
+        if (password_verify($password, $result->wachtwoord)) {
+            //hash wachtwoord
             return $result;
         }
 
