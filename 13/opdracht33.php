@@ -19,32 +19,24 @@ XSLT:
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     version="1.0">
-
     <xsl:template match="/">
-
         <div style="font-family: Arial; border: 1px solid #ccc; padding: 15px; width: 300px;">
-
             <h2>
                 <xsl:value-of select="person/name"/>
             </h2>
-
             <p>
                 <b>Leeftijd:</b>
                 <xsl:value-of select="person/age"/> jaar
             </p>
-
             <p>
                 <b>Woonplaats:</b>
                 <xsl:value-of select="person/city"/>
             </p>
-
             <p>
                 <b>Werk:</b>
                 <xsl:value-of select="person/job"/>
             </p>
-
             <h3>Hobby's</h3>
-
             <ul>
                 <xsl:for-each select="person/hobbies/hobby">
                     <li>
@@ -52,16 +44,12 @@ XSLT:
                     </li>
                 </xsl:for-each>
             </ul>
-
         </div>
-
     </xsl:template>
-
 </xsl:stylesheet>
 -->
 
- <?php
-
+<?php
 $xml_input = "";
 $xslt_input = "";
 $output = "";
@@ -77,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($xml_input != "" && $xslt_input != "") {
 
         //xml document maken en xml inladen
-        $xml_doc = new DOMDocument();
+        $xml_doc = new DOMDocument(); //lege XML(or HTML) class?
         $xml_doc->loadXML($xml_input);
 
         //xslt document maken en xslt inladen
