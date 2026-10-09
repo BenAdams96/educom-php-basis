@@ -2,6 +2,10 @@
 
 class View {
 
+//* Controller de View oplaten halen en variabelen zijn gezet, dan dan de controller dit regelen.
+//* Even extra checken
+
+
     //users weergeven
     public function showUsers($users) { //eerdere probleem wat ik had nu dus weg omdat $users word meegegeven
         ?>

@@ -1,23 +1,16 @@
+
 <?php
 
 $errors = [];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //gegevens uit formulier halen
-    $firstname = $_POST["firstname"];
-    $lastname = $_POST["lastname"];
-    $address = $_POST["address"];
-    $zipcode = $_POST["zipcode"];
-    $phone_number = $_POST["phone_number"];
-    $email = $_POST["email"];
-
-    //check of alle velden zijn ingevuld
-    if (
-        empty($firstname) || empty($lastname) || empty($address) ||
-        empty($zipcode) || empty($phone_number) || empty($email)
-    ) {
-        $errors[] = "Vul alle velden in.";
-    }
+    $firstname = $_POST["firstname"] ?? "";
+    $lastname = $_POST["lastname"] ?? "";
+    $address = $_POST["address"] ?? "";
+    $zipcode = $_POST["zipcode"] ?? "";
+    $phone_number = $_POST["phone_number"] ?? "";
+    $email = $_POST["email"] ?? "";
 
     //postcode controleren met regex
     $postcode_pattern = "/^[1-9][0-9]{3}\s?[a-zA-Z]{2}$/";
@@ -54,40 +47,54 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <h1>Gegevens invoeren</h1>
 
-    <form method="post" id="user_form" onsubmit="return validateForm()">
+    <?php
+    //php foutmeldingen tonen
+    foreach ($errors as $error) {
+        echo "<p style='color:red'>" . htmlspecialchars($error) . "</p>";
+    }
+    ?>
+
+    <!-- onsubmit="return validateForm()" tijdelijk uit voor php test -->
+    <form method="post" id="user_form">
 
         <label>Voornaam:</label><br>
-        <input type="text" name="firstname" id="firstname">
-        <span id="firstname_error"></span> <!-- lege plek in HTML waar JS later tekst in kan zetten -->
+        <input type="text" name="firstname" id="firstname"
+            value="<?= htmlspecialchars($firstname ?? '') ?>">
+        <span id="firstname_error"></span>
 
         <br><br>
 
         <label>Achternaam:</label><br>
-        <input type="text" name="lastname" id="lastname">
+        <input type="text" name="lastname" id="lastname"
+            value="<?= htmlspecialchars($lastname ?? '') ?>">
         <span id="lastname_error"></span>
 
         <br><br>
 
         <label>Adres:</label><br>
-        <input type="text" name="address" id="address">
+        <input type="text" name="address" id="address"
+            value="<?= htmlspecialchars($address ?? '') ?>">
         <span id="address_error"></span>
 
         <br><br>
 
         <label>Postcode:</label><br>
-        <input type="text" name="zipcode" id="zipcode">
+        <input type="text" name="zipcode" id="zipcode"
+            value="<?= htmlspecialchars($zipcode ?? '') ?>">
         <span id="zipcode_error"></span>
 
         <br><br>
 
         <label>Telefoon:</label><br>
-        <input type="text" name="phone_number" id="phone_number">
+        <input type="text" name="phone_number" id="phone_number"
+            value="<?= htmlspecialchars($phone_number ?? '') ?>">
         <span id="phone_number_error"></span>
 
         <br><br>
 
         <label>E-mail:</label><br>
-        <input type="text" name="email" id="email">
+        <input type="text" name="email" id="email"
+            value="<?= htmlspecialchars($email ?? '') ?>">
         <span id="email_error"></span>
 
         <br><br>
@@ -168,15 +175,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             errorField.textContent = "";
             return true;
         }
-        //postcode controleren na een "change" (nadat er een verandering is)
-        //eventlistener voor de zipcode (dus zipcode veld in html), die kijkt of er een verandering plaats vind
-        // zodra dit gebeurt, voert hij de code uit.
-        // dan in zipcode_error veld (die bepaald word met: <span id="zipcode_error"></span>)
-        // text plaatsen (via textContent). dus: zipcode_error.textContent =
-        // postcode_pattern.test(zipcode.value) betekend:
-        //  de zipcode.value (oftewel text in input veld), word gecheckt of die klopt aan de regex (postcode_pattern)
-        // zoja: dan ""     zoniet: dan "Ongeldige postcode"
-
 
         function validateForm() { //JS client-side check.
             //check voor elk veld of het juist is
@@ -222,7 +220,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </script>
 
     <?php
-
 
     //als formulier is verstuurd en alles klopt
     if ($_SERVER["REQUEST_METHOD"] == "POST" && empty($errors)) {

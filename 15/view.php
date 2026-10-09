@@ -1,10 +1,11 @@
 <?php
-/** @var array $users */
 //kreeg error van Intelephense dat $users niet herkend word, wat logisch is. dus na wat raadplegen dit geprobeerd.
 //! Q: hoe los je dit netjes op? -> classes?
 //! Q: dit bestand .php of .html noemen?
 
+//! check tabindex / schermopbouw (ask AI)
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
